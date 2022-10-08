@@ -14,6 +14,23 @@ namespace Serilog.Sinks.Grafana.Loki.Utils;
 
 internal static class LogEventExtensions
 {
+    private const string _labelKeysPropertyName = "__LabelKeys";
+
+    internal static void AttachLabelKeys(this LogEvent logEvent, IEnumerable<string> labelKeys)
+    {
+        logEvent.AddOrUpdateProperty(new LogEventProperty(_labelKeysPropertyName, new ScalarValue(labelKeys)));
+    }
+
+    internal static IEnumerable<string>? DettachLabelKeys(this LogEvent logEvent)
+    {
+        if (logEvent.Properties.TryGetValue(_labelKeysPropertyName, out var labelKeysPropertyValue) && labelKeysPropertyValue is ScalarValue scalarValue)
+        {
+            return scalarValue.Value as IEnumerable<string>;
+        }
+
+        return null;
+    }
+
     /// <summary>
     /// Renames property in the event, if present.
     /// Otherwise no action is performed.

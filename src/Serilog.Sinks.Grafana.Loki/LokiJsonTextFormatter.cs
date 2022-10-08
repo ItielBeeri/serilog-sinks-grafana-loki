@@ -77,9 +77,6 @@ public class LokiJsonTextFormatter : ITextFormatter
         output.Write("{\"Message\":");
         JsonValueFormatter.WriteQuotedJsonString(logEvent.MessageTemplate.Render(logEvent.Properties), output);
 
-        output.Write(",\"MessageTemplate\":");
-        JsonValueFormatter.WriteQuotedJsonString(logEvent.MessageTemplate.Text, output);
-
         var tokensWithFormat = logEvent.MessageTemplate.Tokens
             .OfType<PropertyToken>()
             .Where(pt => pt.Format != null);
@@ -110,7 +107,8 @@ public class LokiJsonTextFormatter : ITextFormatter
                 1);
         }
 
-        foreach (var (key, value) in logEvent.Properties)
+        var labelKeys = logEvent.DettachLabelKeys();
+        foreach (var (key, value) in logEvent.Properties.Where(pair => labelKeys?.Contains(pair.Key) != true))
         {
             var name = GetSanitizedPropertyName(key);
             output.Write(',');

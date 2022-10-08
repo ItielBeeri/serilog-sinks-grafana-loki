@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <AssemblyName>Serilog.Sinks.Grafana.Loki</AssemblyName>
@@ -12,10 +12,10 @@
         <DebugType>embedded</DebugType>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <RepositoryUrl>https://github.com/mishamyte/serilog-sinks-grafana-loki.git</RepositoryUrl>
+        <RepositoryUrl>https://github.com/ItielBeeri/serilog-sinks-grafana-loki.git</RepositoryUrl>
         <!--NuGet package-->
         <PackageIcon>serilog-sink-nuget.png</PackageIcon>
-        <PackageId>Serilog.Sinks.Grafana.Loki</PackageId>
+        <PackageId>Ziv.Serilog.Sinks.Grafana.Loki</PackageId>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageProjectUrl>https://github.com/mishamyte/serilog-sinks-grafana-loki</PackageProjectUrl>
         <PackageReadmeFile>README.md</PackageReadmeFile>

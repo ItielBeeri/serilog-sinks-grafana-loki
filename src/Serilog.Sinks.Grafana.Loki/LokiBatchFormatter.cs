@@ -213,7 +213,8 @@ internal class LokiBatchFormatter : ILokiBatchFormatter
             labels.Add(key, value);
         }
 
-        return (labels,
-            lokiLogEvent.CopyWithProperties(remainingProperties));
+        lokiLogEvent.LabelPropertyKeys.AddRange(labels.Keys);
+
+        return (labels, lokiLogEvent);
     }
 }

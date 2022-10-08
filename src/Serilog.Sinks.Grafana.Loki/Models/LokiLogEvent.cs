@@ -9,6 +9,7 @@
 // See LICENSE file in the project root for full license information.
 
 using Serilog.Events;
+using Serilog.Sinks.Grafana.Loki.Utils;
 
 namespace Serilog.Sinks.Grafana.Loki.Models;
 
@@ -46,15 +47,17 @@ public class LokiLogEvent
     /// </summary>
     public IReadOnlyDictionary<string, LogEventPropertyValue> Properties => LogEvent.Properties;
 
-    internal LokiLogEvent CopyWithProperties(IEnumerable<KeyValuePair<string, LogEventPropertyValue>> properties)
-    {
-        LogEvent = new LogEvent(
-            LogEvent.Timestamp,
-            LogEvent.Level,
-            LogEvent.Exception,
-            LogEvent.MessageTemplate,
-            properties.Select(p => new LogEventProperty(p.Key, p.Value)));
+    /// <summary>
+    /// Keys of the properties that are used as loki labels
+    /// </summary>
+    public List<string> LabelPropertyKeys { get; } = new();
 
-        return this;
+    /// <summary>
+    /// Attaches the provided label keys to the log event
+    /// </summary>
+    /// <param name="labelPropertyKeys"></param>
+    public void SetLabelKeys(IEnumerable<string> labelPropertyKeys)
+    {
+        LogEvent.AttachLabelKeys(labelPropertyKeys);
     }
 }
