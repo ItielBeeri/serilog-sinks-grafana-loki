@@ -25,5 +25,8 @@ public class LokiCredentials
     /// </summary>
     public string Password { get; set; } = null!;
 
-    internal bool IsEmpty => string.IsNullOrEmpty(Login) || string.IsNullOrEmpty(Password);
+    /// <summary>
+    /// Loki tenant ID, sent in X-Scope-OrgID header
+    /// </summary>
+    public string? TenantId { get; set; }
 }

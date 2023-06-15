@@ -24,7 +24,9 @@ public abstract class BaseLokiHttpClient : ILokiHttpClient
     /// </summary>
     protected readonly HttpClient HttpClient;
 
-    /// <summary>
+    private const string TenantHeaderName = "X-Scope-OrgID";
+
+   /// <summary>
     /// Initializes a new instance of the <see cref="BaseLokiHttpClient"/> class.
     /// </summary>
     /// <param name="httpClient">
@@ -41,20 +43,23 @@ public abstract class BaseLokiHttpClient : ILokiHttpClient
     /// <inheritdoc/>
     public virtual void SetCredentials(LokiCredentials? credentials)
     {
-        if (credentials == null || credentials.IsEmpty)
+        if (credentials == null)
         {
             return;
         }
 
         var headers = HttpClient.DefaultRequestHeaders;
 
-        if (headers.Any(h => h.Key == "Authorization"))
+        if (!string.IsNullOrEmpty(credentials.Login) && !string.IsNullOrEmpty(credentials.Password) && !headers.Any(h => h.Key == "Authorization"))
         {
-            return;
+            var token = Base64Encode($"{credentials.Login}:{credentials.Password ?? string.Empty}");
+            headers.Authorization = new AuthenticationHeaderValue("Basic", token);
         }
 
-        var token = Base64Encode($"{credentials.Login}:{credentials.Password ?? string.Empty}");
-        headers.Authorization = new AuthenticationHeaderValue("Basic", token);
+        if (!string.IsNullOrEmpty(credentials.TenantId) && !headers.Any(h => h.Key == TenantHeaderName))
+        {
+            headers.Add(TenantHeaderName, credentials.TenantId);
+        }
     }
 
     /// <inheritdoc/>
